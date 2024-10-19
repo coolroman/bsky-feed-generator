@@ -1,15 +1,18 @@
 {
   "name": "feed-generator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "atproto feed generator starter kit",
   "main": "index.js",
   "repository": "git@github.com:bluesky-social/feed-generator.git",
   "author": "dholms <dtholmgren@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "publishFeed": "ts-node scripts/publishFeedGen.ts",
+    "dotenv-cli": "dotenv -e .env -c",
+    "publishFeed": "yarn dotenv-cli -c feed ts-node scripts/publishFeedGen.ts",
+    "unpublishFeed": "yarn dotenv-cli -c feed ts-node scripts/unpublishFeedGen.ts",
     "start": "ts-node src/index.ts",
-    "build": "tsc"
+    "build": "rimraf dist && tsc",
+    "build2": "rimraf build/*.cjs && esbuild src/index.ts --bundle --platform=node --outfile=build/server.cjs --format=cjs"
   },
   "dependencies": {
     "@atproto/api": "^0.6.20",
@@ -19,7 +22,6 @@
     "@atproto/syntax": "^0.1.2",
     "@atproto/xrpc-server": "^0.6.0",
     "better-sqlite3": "^8.3.0",
-    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "kysely": "^0.22.0",
     "multiformats": "^9.9.0"
@@ -28,7 +30,13 @@
     "@types/better-sqlite3": "^7.6.4",
     "@types/express": "^4.17.17",
     "@types/node": "^20.1.2",
+    "dotenv-cli": "^7.4.2",
+    "drizzle-kit": "^0.26.2",
+    "drizzle-orm": "^0.35.2",
+    "esbuild": "^0.24.0",
+    "rimraf": "^6.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

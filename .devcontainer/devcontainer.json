@@ -1,0 +1,38 @@
+//devcontainer.json
+{
+  "dockerComposeFile": "../docker-compose.yaml",
+  "service": "devc",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "denoland.vscode-deno",
+        "ms-vscode.vscode-typescript-next",
+        "ms-python.vscode-pylance",
+        "ms-python.python",
+        "esbenp.prettier-vscode",
+        "rvest.vs-code-prettier-eslint",
+        "inferrinizzard.prettier-sql-vscode",
+        "GitLab.gitlab-workflow",
+        "mhutchie.git-graph",
+        "bradlc.vscode-tailwindcss",
+        "svelte.svelte-vscode",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-sqlite",
+        "mtxr.sqltools-driver-pg",
+        "donjayamanne.python-environment-manager",
+        "DarrenLevine.auto-debug",
+        "oven.bun-vscode",
+        "ms-python.autopep8",
+        "ardenivanov.svelte-intellisense",
+        "redhat.vscode-yaml",
+        "Prisma.prisma",
+        "vit-m.template-strings",
+        "fabianlauer.vs-code-xml-format",
+        "meganrogge.template-string-converter",
+        "Orta.vscode-jest"
+      ]
+    }
+  },
+  "features": {}
+}

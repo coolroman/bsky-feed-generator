@@ -14,7 +14,7 @@ const run = async () => {
   // A short name for the record that will show in urls
   // Lowercase with no spaces.
   // Ex: whats-hot
-  const recordName = 'ru-text-only'
+  const recordName = 'text-only-ru'
 
   // A display name for your feed
   // Ex: What's Hot
@@ -42,35 +42,23 @@ const run = async () => {
   const agent = new AtpAgent({ service: 'https://bsky.social' })
   await agent.login({ identifier: handle, password })
 
-  let avatarRef: BlobRef | undefined
-  if (avatar) {
-    let encoding: string
-    if (avatar.endsWith('png')) {
-      encoding = 'image/png'
-    } else if (avatar.endsWith('jpg') || avatar.endsWith('jpeg')) {
-      encoding = 'image/jpeg'
-    } else {
-      throw new Error('expected png or jpeg')
-    }
-    const img = await fs.readFile(avatar)
-    const blobRes = await agent.api.com.atproto.repo.uploadBlob(img, {
-      encoding,
+  try {
+    const result = await agent.api.com.atproto.repo.deleteRecord({
+      repo: agent.session?.did ?? '',
+      collection: ids.AppBskyFeedGenerator,
+      rkey: recordName,
+      record: {
+        did: feedGenDid,
+        displayName: displayName,
+        description: description,
+        createdAt: new Date().toISOString(),
+      },
     })
-    avatarRef = blobRes.data.blob
-  }
 
-  await agent.api.com.atproto.repo.putRecord({
-    repo: agent.session?.did ?? '',
-    collection: ids.AppBskyFeedGenerator,
-    rkey: recordName,
-    record: {
-      did: feedGenDid,
-      displayName: displayName,
-      description: description,
-      avatar: avatarRef,
-      createdAt: new Date().toISOString(),
-    },
-  })
+    if (result.success) {
+      return true
+    }
+  } catch (e) {}
 
   console.log('All done 🎉')
 }

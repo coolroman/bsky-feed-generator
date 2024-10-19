@@ -13,14 +13,25 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     // Just for fun :)
     // Delete before actually using
     for (const post of ops.posts.creates) {
-      console.log(post.record.text)
+      if (
+        // post.record.reply == null &&
+        post.record.langs?.includes('ru') &&
+        post.record.embed == null &&
+        // post.record.text.split(' ').length >= 3 &&
+        post.record.reply == null
+      ) {
+        console.log(post)
+      }
     }
 
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
       .filter((create) => {
-        // only alf-related posts
-        return create.record.text.toLowerCase().includes('alf')
+        return (
+          create.record.langs?.includes('ru') &&
+          create.record.embed == null &&
+          create.record.reply == null
+        )
       })
       .map((create) => {
         // map alf-related posts to a db row

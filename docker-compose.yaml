@@ -1,0 +1,53 @@
+networks:
+  bsky-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.9.0.0/16
+          gateway: 10.9.0.1
+
+volumes:
+  db-data:
+
+name: bsky
+services:
+  devc:
+    # image: mcr.microsoft.com/devcontainers/base:ubuntu
+    # profiles: [dev]
+    # environment:
+    #   CHROME_HOST: 10.6.0.8
+    # DATABASE_URL: postgres://hdrc:${POSTGRES_PASSWORD}@db:5432/hdrc
+    ports:
+      - 3010:3010 # feed
+      # - 4983:4983 # drizzle studio
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      # platforms:
+      #   - linux/arm64/v8
+      # - linux/amd64
+    volumes:
+      - ..:/workspaces:cached
+    command: sleep infinity
+    networks:
+      bsky-network:
+        ipv4_address: 10.9.0.2
+
+  feed:
+    profiles: [gitlab]
+    image: registry.gitlab.com/kulinsky.roman/hdrc/feed
+    build:
+      context: .
+      dockerfile: Dockerfile.feed
+      platforms:
+        - linux/amd64
+        # - linux/arm64/v8
+    ports:
+      - 3011:3000
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env.feed.local
+    networks:
+      bsky-network:
+        ipv4_address: 10.9.0.3
